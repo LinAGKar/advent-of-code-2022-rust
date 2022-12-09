@@ -14,7 +14,9 @@ fn main() {
     println!("{}", map
             .iter()
             .enumerate()
-            .flat_map(|(y, row)| row.iter().enumerate().map(move |(x, &height)| (y, x, height)))
+            .skip(1)
+            .take(height - 2)
+            .flat_map(|(y, row)| row.iter().enumerate().skip(1).take(width - 2).map(move |(x, &height)| (y, x, height)))
             .map(|(y, x, tree_height)| {
         let score = [
             (-1, 0),
