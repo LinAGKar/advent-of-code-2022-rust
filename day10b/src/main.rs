@@ -2,8 +2,8 @@ use std::io::Read;
 
 fn do_cycle(cycle: i16, x: i16) {
     let pos = cycle % 40;
-    print!("{}", if pos >= x && pos <= x + 2 { '█' } else { ' ' });
-    if cycle % 40 == 0 {
+    print!("{}", if pos >= x - 1 && pos <= x + 1 { '█' } else { ' ' });
+    if pos == 39 {
         println!();
     }
 }
@@ -12,7 +12,7 @@ fn main() {
     let mut input = String::new();
     std::io::stdin().read_to_string(&mut input).unwrap();
 
-    let mut cycle = 1;
+    let mut cycle = 0;
     let mut x = 1;
     for line in input.lines() {
         let prev_cycle = cycle;
