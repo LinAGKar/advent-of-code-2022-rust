@@ -1,4 +1,4 @@
-use std::collections::{HashSet, VecDeque};
+use std::collections::VecDeque;
 use std::io::Read;
 
 fn main() {
@@ -24,7 +24,8 @@ fn main() {
 
     let mut open_set = VecDeque::new();
     open_set.push_back((0, start));
-    let mut visited = HashSet::new();
+    let mut visited: Vec<Vec<_>> = map.iter().map(|row| row.iter().map(|_| false).collect()).collect();
+    visited[start[0] as usize][start[1] as usize] = true;
 
     while let Some((dist, pos)) = open_set.pop_front() {
         let old_height = map[pos[0] as usize][pos[1] as usize];
@@ -46,11 +47,12 @@ fn main() {
             }
 
             if new_pos.iter().any(|&x| x < 0) || new_pos[0] >= height || new_pos[1] >= width ||
-               old_height > map[new_pos[0] as usize][new_pos[1] as usize] + 1 || visited.contains(&new_pos) {
+               old_height > map[new_pos[0] as usize][new_pos[1] as usize] + 1 ||
+               visited[new_pos[0] as usize][new_pos[1] as usize] {
                 continue;
             }
 
-            visited.insert(new_pos);
+            visited[new_pos[0] as usize][new_pos[1] as usize] = true;
             open_set.push_back((new_dist, new_pos));
         }
     }

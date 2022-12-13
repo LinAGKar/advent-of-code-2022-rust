@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, HashMap};
+use std::collections::BTreeSet;
 use std::io::Read;
 
 fn main() {
@@ -28,11 +28,11 @@ fn main() {
 
     let start_f_score = h(start);
 
-    let mut f_scores = HashMap::new();
-    f_scores.insert(start, start_f_score);
+    let mut f_scores: Vec<Vec<_>> = map.iter().map(|row| row.iter().map(|_| 0).collect()).collect();
+    f_scores[start[0] as usize][start[1] as usize] = start_f_score;
 
-    let mut g_scores = HashMap::new();
-    g_scores.insert(start, 0);
+    let mut g_scores: Vec<Vec<_>> = map.iter().map(|row| row.iter().map(|_| None).collect()).collect();
+    g_scores[start[0] as usize][start[1] as usize] = Some(0);
 
     let mut open_set = BTreeSet::new();
     open_set.insert((start_f_score, start));
@@ -45,7 +45,7 @@ fn main() {
             println!("{}", f_score);
             break;
         }
-        let g_score = g_scores[&pos];
+        let g_score = g_scores[pos[0] as usize][pos[1] as usize].unwrap();
         let old_height = map[pos[0] as usize][pos[1] as usize];
 
         for delta in [
@@ -64,15 +64,15 @@ fn main() {
                 continue;
             }
             let tentative_g_score = g_score + 1;
-            let old_g_score = g_scores.get(&new_pos).copied();
+            let old_g_score = g_scores[new_pos[0] as usize][new_pos[1] as usize];
             if tentative_g_score < old_g_score.unwrap_or(i16::MAX) {
                 if old_g_score.is_some() {
-                    open_set.remove(&(f_scores[&new_pos], new_pos));
+                    open_set.remove(&(f_scores[new_pos[0] as usize][new_pos[1] as usize], new_pos));
                 }
 
                 let new_f_score = tentative_g_score + h(new_pos);
-                f_scores.insert(new_pos, new_f_score);
-                g_scores.insert(new_pos, tentative_g_score);
+                f_scores[new_pos[0] as usize][new_pos[1] as usize] = new_f_score;
+                g_scores[new_pos[0] as usize][new_pos[1] as usize] = Some(tentative_g_score);
                 open_set.insert((new_f_score, new_pos));
             }
         }
