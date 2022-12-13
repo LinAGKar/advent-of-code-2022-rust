@@ -1,5 +1,4 @@
-use std::collections::{BinaryHeap, HashSet};
-use std::cmp::Reverse;
+use std::collections::{HashSet, VecDeque};
 use std::io::Read;
 
 fn main() {
@@ -23,11 +22,11 @@ fn main() {
     let height = map.len() as i16;
     let width = map[0].len() as i16;
 
-    let mut open_set = BinaryHeap::new();
-    open_set.push((Reverse(0), 0, start));
+    let mut open_set = VecDeque::new();
+    open_set.push_back((0, start));
     let mut visited = HashSet::new();
 
-    while let Some((_, dist, pos)) = open_set.pop() {
+    while let Some((dist, pos)) = open_set.pop_front() {
         let old_height = map[pos[0] as usize][pos[1] as usize];
         if old_height == 0 {
             println!("{}", dist);
@@ -52,7 +51,7 @@ fn main() {
             }
 
             visited.insert(new_pos);
-            open_set.push((Reverse(new_dist), new_dist, new_pos));
+            open_set.push_back((new_dist, new_pos));
         }
     }
 }
