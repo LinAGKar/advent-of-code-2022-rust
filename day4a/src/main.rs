@@ -10,6 +10,7 @@ fn main() {
             [limits.next().unwrap(), limits.next().unwrap()]
         });
         let elves = [elves.next().unwrap(), elves.next().unwrap()];
-        (elves[0][0] <= elves[1][0] && elves[0][1] >= elves[1][1]) || (elves[1][0] <= elves[0][0] && elves[1][1] >= elves[0][1])
+        (elves[0][0] <= elves[1][0] && elves[0][1] >= elves[1][1]) ||
+            (elves[1][0] <= elves[0][0] && elves[1][1] >= elves[0][1])
     }).count());
 }
